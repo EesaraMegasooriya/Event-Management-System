@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 interface User {
   userId: string;
@@ -26,17 +27,20 @@ function NewGM(): React.ReactElement {
   const [status, setStatus] = useState<boolean>(true);
   const [groupMembers, setGroupMembers] = useState<string[]>([]);
   const [groupType, setGroupType] = useState<string>('');
-  const [users, setUsers] = useState<User[]>([]); // State for fetched users
-  const [loading, setLoading] = useState<boolean>(true); // State for loading
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Fetch users from the backend
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:5001/api/users'); // Replace with your backend endpoint
+        const response = await axios.get('http://localhost:5001/api/users');
         setUsers(response.data);
       } catch (error) {
-        console.error('Error fetching users:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to fetch users. Please try again later.',
+        });
       } finally {
         setLoading(false);
       }
@@ -47,130 +51,136 @@ function NewGM(): React.ReactElement {
 
   const handleSubmit = async () => {
     if (!groupName || !groupCode || !groupType) {
-      alert('Please fill in all required fields.');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Validation Error',
+        text: 'Please fill in all required fields.',
+      });
       return;
     }
-  
-    // Log the current value of `status`
-    console.log('Current status value:', status);
-  
+
     const formattedGroupMembers = groupMembers.map((userName) => {
       const user = users.find((u) => u.userName === userName);
       return { userId: user?.userId || '', userName };
     });
-  
+
     const data = {
       groupName,
       groupCode,
-      status, // Pass the exact value of `status` from the state
+      status,
       groupMembers: formattedGroupMembers,
       groupType,
     };
-  
-    console.log('Sending data:', data);
-  
+
     try {
       const response = await axios.post('http://localhost:5001/api/groups', data);
-      console.log('Group created successfully:', response.data);
-      alert('Group created successfully!');
+      Swal.fire({
+        icon: 'success',
+        title: 'Group Created',
+        text: 'The group has been created successfully!',
+      });
     } catch (error) {
-      console.error('Error creating group:', error);
-      alert('Failed to create group. Please try again.');
+      Swal.fire({
+        icon: 'error',
+        title: 'Submission Error',
+        text: 'Failed to create group. Please try again later.',
+      });
     }
   };
-  
 
   return (
-    <div className="mt-8">
-      <Box sx={{ maxWidth: 500, mx: 'auto', p: 4, boxShadow: 3, borderRadius: 2, bgcolor: 'background.paper' }}>
-        <Typography variant="h4" align="center" gutterBottom fontWeight="bold">
-          Add New Group
-        </Typography>
+    <div className="pt-16 min-h-screen bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 items-center justify-center">
+      <div className="mt-8">
+        <Box sx={{ maxWidth: 500, mx: 'auto', p: 4, boxShadow: 3, borderRadius: 2, bgcolor: 'background.paper' }}>
+          <Typography variant="h4" align="center" gutterBottom fontWeight="bold">
+            Add New Group
+          </Typography>
 
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Typography variant="subtitle1" fontWeight="bold">Group Name</Typography>
-            <TextField
-              fullWidth
-              label="Enter Group Name"
-              variant="outlined"
-              size="small"
-              value={groupName}
-              onChange={(e) => setGroupName(e.target.value)}
-            />
-          </Grid>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Typography variant="subtitle1" fontWeight="bold">Group Name</Typography>
+              <TextField
+                fullWidth
+                label="Enter Group Name"
+                variant="outlined"
+                size="small"
+                value={groupName}
+                onChange={(e) => setGroupName(e.target.value)}
+              />
+            </Grid>
 
-          <Grid item xs={12}>
-            <Typography variant="subtitle1" fontWeight="bold">Group Code</Typography>
-            <TextField
-              fullWidth
-              label="Enter Group Code"
-              variant="outlined"
-              size="small"
-              value={groupCode}
-              onChange={(e) => setGroupCode(e.target.value)}
-            />
-          </Grid>
+            <Grid item xs={12}>
+              <Typography variant="subtitle1" fontWeight="bold">Group Code</Typography>
+              <TextField
+                fullWidth
+                label="Enter Group Code"
+                variant="outlined"
+                size="small"
+                value={groupCode}
+                onChange={(e) => setGroupCode(e.target.value)}
+              />
+            </Grid>
 
-          <Grid item xs={12}>
-            <Typography variant="subtitle1" fontWeight="bold">Status</Typography>
-            <Switch
-              checked={status}
-              onChange={(e) => setStatus(e.target.checked)}
-            />
-          </Grid>
+            <Grid item xs={12}>
+              <Typography variant="subtitle1" fontWeight="bold">Status</Typography>
+              <Switch
+                checked={status}
+                onChange={(e) => setStatus(e.target.checked)}
+              />
+            </Grid>
 
-          <Grid item xs={12}>
-            <Typography variant="subtitle1" fontWeight="bold">Add Group Members</Typography>
-            <FormControl fullWidth>
-              <InputLabel>Select Members</InputLabel>
-              {loading ? (
-                <CircularProgress size={24} />
-              ) : (
+            <Grid item xs={12}>
+              <Typography variant="subtitle1" fontWeight="bold">Add Group Members</Typography>
+              <FormControl fullWidth>
+                <InputLabel>Select Members</InputLabel>
+                {loading ? (
+                  <CircularProgress size={24} />
+                ) : (
+                  <Select
+                    multiple
+                    value={groupMembers}
+                    onChange={(e) => setGroupMembers(e.target.value as string[])}
+                    renderValue={(selected) => selected.join(', ')}
+                  >
+                    {users.map((user) => (
+                      <MenuItem key={user.userId} value={user.userName}>
+                        {user.userName}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                )}
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Typography variant="subtitle1" fontWeight="bold">Group Type</Typography>
+              <FormControl fullWidth>
+                <InputLabel>Select Group Type</InputLabel>
                 <Select
-                  multiple
-                  value={groupMembers}
-                  onChange={(e) => setGroupMembers(e.target.value as string[])} // Store selected user names
-                  renderValue={(selected) => selected.join(', ')} // Show selected names
+                  value={groupType}
+                  onChange={(e) => setGroupType(e.target.value)}
                 >
-                  {users.map((user) => (
-                    <MenuItem key={user.userId} value={user.userName}>
-                      {user.userName}
-                    </MenuItem>
-                  ))}
+                  <MenuItem value="Corporate">Corporate</MenuItem>
+                  <MenuItem value="Private">Private</MenuItem>
+                  <MenuItem value="Public">Public</MenuItem>
                 </Select>
-              )}
-            </FormControl>
-          </Grid>
+              </FormControl>
+            </Grid>
 
-          <Grid item xs={12}>
-            <Typography variant="subtitle1" fontWeight="bold">Group Type</Typography>
-            <FormControl fullWidth>
-              <InputLabel>Select Group Type</InputLabel>
-              <Select
-                value={groupType}
-                onChange={(e) => setGroupType(e.target.value)}
+            <Grid item xs={12}>
+              <Button
+                fullWidth
+                variant="contained"
+                endIcon={<SendIcon />}
+                sx={{ mt: 2 }}
+                onClick={handleSubmit}
               >
-                <MenuItem value="Corporate">Corporate</MenuItem>
-                <MenuItem value="Private">Private</MenuItem>
-                <MenuItem value="Public">Public</MenuItem>
-              </Select>
-            </FormControl>
+                Submit
+              </Button>
+            </Grid>
           </Grid>
-
-          <Grid item xs={12}>
-            <Button
-              fullWidth
-              variant="contained"
-              endIcon={<SendIcon />}
-              sx={{ mt: 2 }}
-              onClick={handleSubmit}
-            >
-              Submit
-            </Button>
-          </Grid>
-        </Grid>
-      </Box>
+        </Box>
+      </div>
     </div>
   );
 }
