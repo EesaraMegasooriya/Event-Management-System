@@ -27,7 +27,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // Routes
-app.use('/api/groups', require('./routes/groupRoutes'));
+app.use('/api/groups', require('./routes/GroupRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/events', require('./routes/eventRoutes'));
 
