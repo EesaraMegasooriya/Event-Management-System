@@ -21,7 +21,7 @@ mongoose
   .then(() => console.log('MongoDB connected...'))
   .catch((err) => console.error('MongoDB connection error:', err));
 
-// Enable Mongoose debugging for MongoDB queries (optional, remove in production)
+// Enable Mongoose debugging for non-production environments
 if (process.env.NODE_ENV !== 'production') {
   mongoose.set('debug', true);
 }
