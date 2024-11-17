@@ -92,7 +92,7 @@ function NewGM(): React.ReactElement {
   };
 
   return (
-    <div className="pt-16 min-h-screen bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 items-center justify-center">
+    <div className="pt-16 pb-16 min-h-screen bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 items-center justify-center">
       <div className="mt-8">
         <Box sx={{ maxWidth: 500, mx: 'auto', p: 4, boxShadow: 3, borderRadius: 2, bgcolor: 'background.paper' }}>
           <Typography variant="h4" align="center" gutterBottom fontWeight="bold">

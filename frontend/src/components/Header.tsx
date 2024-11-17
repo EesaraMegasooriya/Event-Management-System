@@ -17,7 +17,7 @@ const Header: React.FC = () => {
             Dashboard
           </a>
           <a href="/calendar" className="hover:text-gray-400">
-            Calander
+            Calender
           </a>
           {/* <a href="/add-event" className="hover:text-gray-400">
             Add Event
@@ -61,7 +61,7 @@ const Header: React.FC = () => {
             Dashboard
           </a>
           <a href="/calendar" className="hover:text-gray-400">
-            Calander
+            Calender
           </a>
           {/* <a href="/add-event" className="hover:text-gray-400">
             Add Event
