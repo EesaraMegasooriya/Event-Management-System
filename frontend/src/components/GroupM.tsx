@@ -3,7 +3,7 @@ import { Calendar, momentLocalizer, Event as BigCalendarEvent } from 'react-big-
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import axios from 'axios';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Typography, useMediaQuery, useTheme } from '@mui/material';
 
 interface Event {
   _id: string;
@@ -29,6 +29,8 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://em-events-802d779
 
 function GroupM(): React.ReactElement {
   const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Check if screen size is small
 
   // Fetch events from backend
   useEffect(() => {
@@ -61,9 +63,9 @@ function GroupM(): React.ReactElement {
     <div className="min-h-screen bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 flex flex-col items-center justify-center">
       <Box
         sx={{
-          maxWidth: '1000px',
+          maxWidth: isMobile ? '95%' : '1000px',
           mx: 'auto',
-          p: 4,
+          p: 2,
           backgroundImage: "url('https://source.unsplash.com/featured/?calendar')",
           backgroundSize: 'cover',
           backgroundPosition: 'center',
@@ -81,12 +83,17 @@ function GroupM(): React.ReactElement {
             color: 'white',
             borderRadius: 2,
             p: 1,
+            fontSize: isMobile ? '1.5rem' : '2rem', // Adjust font size for mobile
           }}
         >
           Event Calendar
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
-          <Button variant="contained" href="/add-event">
+          <Button
+            variant="contained"
+            href="/add-event"
+            size={isMobile ? 'small' : 'medium'} // Adjust button size for mobile
+          >
             Create Event
           </Button>
         </Box>
@@ -103,7 +110,7 @@ function GroupM(): React.ReactElement {
             events={events}
             startAccessor="start"
             endAccessor="end"
-            style={{ height: 500 }}
+            style={{ height: isMobile ? 400 : 500 }} // Adjust calendar height for mobile
             popup
             onSelectEvent={(event) => {
               alert(`Event: ${event.title}\nVenue: ${event.venue}\nType: ${event.eventType}`);

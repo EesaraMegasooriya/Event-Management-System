@@ -19,6 +19,8 @@ import {
   MenuItem,
   Switch,
   FormControlLabel,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -49,6 +51,8 @@ const GroupView: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Detect small screens
 
   useEffect(() => {
     fetchGroups();
@@ -166,43 +170,35 @@ const GroupView: React.FC = () => {
 
   return (
     <div className="pt-16 min-h-screen bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 items-center justify-center text-white">
-      <Box sx={{ maxWidth: '1000px', mx: 'auto', p: 4 }}>
-        <div className="font-extrabold text-center text-4xl pb-8">Group Management</div>
+      <Box
+        sx={{
+          maxWidth: isMobile ? '95%' : '1000px',
+          mx: 'auto',
+          p: 2,
+        }}
+      >
+        <Typography
+          variant="h4"
+          align="center"
+          fontWeight="bold"
+          sx={{ mb: 4 }}
+        >
+          Group Management
+        </Typography>
 
         <Box mb={2} textAlign="right">
-          <button
+          <Button
+            variant="contained"
+            color="success"
             onClick={handleNavigation}
-            className="rounded-lg relative w-36 h-10 cursor-pointer flex items-center border border-green-500 bg-green-500 group hover:bg-green-500 active:bg-green-500 active:border-green-500"
+            sx={{ borderRadius: 2 }}
           >
-            <span
-              className="text-gray-200 font-semibold ml-8 transform group-hover:translate-x-20 transition-all duration-300"
-            >
-              Add Item
-            </span>
-            <span
-              className="absolute right-0 h-full w-10 rounded-lg bg-green-500 flex items-center justify-center transform group-hover:translate-x-0 group-hover:w-full transition-all duration-300"
-            >
-              <svg
-                className="svg w-8 text-white"
-                fill="none"
-                height="24"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                width="24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <line x1="12" x2="12" y1="5" y2="19"></line>
-                <line x1="5" x2="19" y1="12" y2="12"></line>
-              </svg>
-            </span>
-          </button>
+            Add Group
+          </Button>
         </Box>
 
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="group table">
+        <TableContainer component={Paper} sx={{ overflowX: 'auto', mb: 2 }}>
+          <Table aria-label="group table">
             <TableHead>
               <TableRow>
                 <TableCell sx={{ fontWeight: 'bold' }}>Group Name</TableCell>
@@ -241,7 +237,7 @@ const GroupView: React.FC = () => {
               top: '50%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
-              width: 500,
+              width: isMobile ? '90%' : 500,
               bgcolor: 'background.paper',
               boxShadow: 24,
               p: 4,
