@@ -34,6 +34,9 @@ interface Event {
   invitees: Participant[];
 }
 
+// Define the API base URL
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://em-events-802d77926c0b.herokuapp.com';
+
 const Dashboard: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const navigate = useNavigate();
@@ -44,7 +47,7 @@ const Dashboard: React.FC = () => {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get<Event[]>('http://localhost:5001/api/events');
+      const response = await axios.get<Event[]>(`${API_BASE_URL}/api/events`);
       setEvents(response.data);
     } catch (error) {
       console.error('Error fetching events:', error);
@@ -68,7 +71,7 @@ const Dashboard: React.FC = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete(`http://localhost:5001/api/events/${id}`);
+          await axios.delete(`${API_BASE_URL}/api/events/${id}`);
           setEvents(events.filter((event) => event._id !== id));
           Swal.fire('Deleted!', 'The event has been deleted.', 'success');
         } catch (error) {
