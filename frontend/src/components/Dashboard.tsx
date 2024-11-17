@@ -96,9 +96,21 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 flex flex-col items-center justify-center text-white">
-      <div className="text-4xl font-extrabold text-center pt-10">Event Management Dashboard</div>
-      <Box sx={{ maxWidth: '1000px', mx: 'auto', p: 4 }}>
-        <TableContainer component={Paper} sx={{ mt: 4 }}>
+      <Typography variant="h4" align="center" fontWeight="bold" sx={{ mt: 2, mb: 4 }}>
+        Event Management Dashboard
+      </Typography>
+      <Box
+        sx={{
+          maxWidth: '1000px',
+          width: '95%',
+          mx: 'auto',
+          p: 2,
+          bgcolor: 'background.paper',
+          borderRadius: 2,
+          boxShadow: 3,
+        }}
+      >
+        <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>
           <Table sx={{ minWidth: 650 }} aria-label="event table">
             <TableHead>
               <TableRow>
@@ -114,7 +126,12 @@ const Dashboard: React.FC = () => {
               {events.map((event) => (
                 <TableRow key={event._id}>
                   <TableCell>{event.title}</TableCell>
-                  <TableCell>{new Date(event.dateTime).toLocaleString()}</TableCell>
+                  <TableCell>
+                    {new Date(event.dateTime).toLocaleString('en-US', {
+                      dateStyle: 'medium',
+                      timeStyle: 'short',
+                    })}
+                  </TableCell>
                   <TableCell>{event.venue}</TableCell>
                   <TableCell>
                     <Chip
@@ -130,10 +147,19 @@ const Dashboard: React.FC = () => {
                   </TableCell>
                   <TableCell>{event.status}</TableCell>
                   <TableCell>
-                    <Button onClick={() => handleEdit(event)} startIcon={<EditIcon />}>
+                    <Button
+                      onClick={() => handleEdit(event)}
+                      startIcon={<EditIcon />}
+                      sx={{ mb: 1 }}
+                    >
                       Edit
                     </Button>
-                    <Button color="error" onClick={() => handleDelete(event._id)} startIcon={<DeleteIcon />}>
+                    <Button
+                      color="error"
+                      onClick={() => handleDelete(event._id)}
+                      startIcon={<DeleteIcon />}
+                      sx={{ mb: 1 }}
+                    >
                       Delete
                     </Button>
                   </TableCell>
