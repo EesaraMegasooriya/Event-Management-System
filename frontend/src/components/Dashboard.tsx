@@ -95,7 +95,7 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 flex flex-col items-center justify-center text-white">
+    <div className="min-h-screen pb-11 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 flex flex-col items-center justify-center text-white">
       <Typography variant="h4" align="center" fontWeight="bold" sx={{ mt: 2, mb: 4 }}>
         Event Management Dashboard
       </Typography>
