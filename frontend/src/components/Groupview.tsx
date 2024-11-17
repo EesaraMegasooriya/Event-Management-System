@@ -40,6 +40,9 @@ interface Group {
   groupType: string;
 }
 
+// Define the API base URL
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://em-events-802d77926c0b.herokuapp.com';
+
 const GroupView: React.FC = () => {
   const navigate = useNavigate();
   const [groups, setGroups] = useState<Group[]>([]);
@@ -54,7 +57,7 @@ const GroupView: React.FC = () => {
 
   const fetchGroups = async () => {
     try {
-      const response = await axios.get<Group[]>('http://localhost:5001/api/groups');
+      const response = await axios.get<Group[]>(`${API_BASE_URL}/api/groups`);
       setGroups(response.data);
     } catch (error) {
       Swal.fire({
@@ -67,7 +70,7 @@ const GroupView: React.FC = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get<User[]>('http://localhost:5001/api/users');
+      const response = await axios.get<User[]>(`${API_BASE_URL}/api/users`);
       setUsers(response.data);
     } catch (error) {
       Swal.fire({
@@ -92,7 +95,7 @@ const GroupView: React.FC = () => {
     if (!result.isConfirmed) return;
 
     try {
-      await axios.delete(`http://localhost:5001/api/groups/${id}`);
+      await axios.delete(`${API_BASE_URL}/api/groups/${id}`);
       Swal.fire({
         icon: 'success',
         title: 'Deleted!',
@@ -125,7 +128,7 @@ const GroupView: React.FC = () => {
         groupMembers: selectedGroup.groupMembers,
       };
 
-      await axios.put(`http://localhost:5001/api/groups/${selectedGroup._id}`, updatedGroup);
+      await axios.put(`${API_BASE_URL}/api/groups/${selectedGroup._id}`, updatedGroup);
       Swal.fire({
         icon: 'success',
         title: 'Updated!',

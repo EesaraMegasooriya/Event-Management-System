@@ -21,6 +21,9 @@ interface User {
   userName: string;
 }
 
+// Define the API base URL
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://em-events-802d77926c0b.herokuapp.com';
+
 function NewGM(): React.ReactElement {
   const [groupName, setGroupName] = useState<string>('');
   const [groupCode, setGroupCode] = useState<string>('');
@@ -33,7 +36,7 @@ function NewGM(): React.ReactElement {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:5001/api/users');
+        const response = await axios.get(`${API_BASE_URL}/api/users`);
         setUsers(response.data);
       } catch (error) {
         Swal.fire({
@@ -73,7 +76,7 @@ function NewGM(): React.ReactElement {
     };
 
     try {
-      const response = await axios.post('http://localhost:5001/api/groups', data);
+      const response = await axios.post(`${API_BASE_URL}/api/groups`, data);
       Swal.fire({
         icon: 'success',
         title: 'Group Created',

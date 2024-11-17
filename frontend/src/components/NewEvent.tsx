@@ -29,6 +29,9 @@ interface Option {
   name: string;
 }
 
+// Define the API base URL
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://em-events-802d77926c0b.herokuapp.com';
+
 function NewEvent(): React.ReactElement {
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
@@ -48,8 +51,8 @@ function NewEvent(): React.ReactElement {
     const fetchGroupsAndUsers = async () => {
       try {
         const [groupRes, userRes] = await Promise.all([
-          axios.get('http://localhost:5001/api/groups'),
-          axios.get('http://localhost:5001/api/users'),
+          axios.get(`${API_BASE_URL}/api/groups`),
+          axios.get(`${API_BASE_URL}/api/users`),
         ]);
 
         setGroups(groupRes.data.map((group: any) => ({ id: group.groupCode, name: group.groupName })));
@@ -114,14 +117,14 @@ function NewEvent(): React.ReactElement {
     try {
       if (routerLocation.state?.event) {
         const eventId = routerLocation.state.event._id;
-        await axios.put(`http://localhost:5001/api/events/${eventId}`, eventData);
+        await axios.put(`${API_BASE_URL}/api/events/${eventId}`, eventData);
         Swal.fire({
           icon: 'success',
           title: 'Event Updated',
           text: 'The event has been successfully updated!',
         });
       } else {
-        await axios.post('http://localhost:5001/api/events', eventData);
+        await axios.post(`${API_BASE_URL}/api/events`, eventData);
         Swal.fire({
           icon: 'success',
           title: 'Event Created',

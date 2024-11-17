@@ -32,6 +32,9 @@ interface Event {
   status: string;
 }
 
+// Define the API base URL
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://em-events-802d77926c0b.herokuapp.com';
+
 const EventTable: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
@@ -44,7 +47,7 @@ const EventTable: React.FC = () => {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get<Event[]>('http://localhost:5001/api/events');
+      const response = await axios.get<Event[]>(`${API_BASE_URL}/api/events`);
       setEvents(response.data);
     } catch (error) {
       console.error('Error fetching events:', error);
@@ -55,7 +58,7 @@ const EventTable: React.FC = () => {
     if (!window.confirm('Are you sure you want to delete this event?')) return;
 
     try {
-      await axios.delete(`http://localhost:5001/api/events/${id}`);
+      await axios.delete(`${API_BASE_URL}/api/events/${id}`);
       alert('Event deleted successfully!');
       setEvents(events.filter((event) => event._id !== id));
     } catch (error) {
@@ -78,7 +81,7 @@ const EventTable: React.FC = () => {
 
     try {
       const { _id, title, dateTime, venue, eventType, description } = selectedEvent;
-      await axios.put(`http://localhost:5001/api/events/${_id}`, {
+      await axios.put(`${API_BASE_URL}/api/events/${_id}`, {
         title,
         dateTime,
         venue,

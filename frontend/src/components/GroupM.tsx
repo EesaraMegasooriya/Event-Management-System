@@ -24,6 +24,9 @@ interface CalendarEvent extends BigCalendarEvent {
   status: string;
 }
 
+// Define the API base URL dynamically
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://em-events-802d77926c0b.herokuapp.com';
+
 function GroupM(): React.ReactElement {
   const [events, setEvents] = useState<CalendarEvent[]>([]);
 
@@ -31,7 +34,7 @@ function GroupM(): React.ReactElement {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axios.get<Event[]>('http://localhost:5001/api/events');
+        const response = await axios.get<Event[]>(`${API_BASE_URL}/api/events`);
         // Format the events for the calendar
         const formattedEvents: CalendarEvent[] = response.data.map((event) => ({
           id: event._id,
@@ -55,71 +58,71 @@ function GroupM(): React.ReactElement {
   const localizer = momentLocalizer(moment);
 
   return (
-    <div className=" min-h-screen bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 flex flex-col items-center justify-center">
-    <Box
-      sx={{
-        maxWidth: '1000px',
-        mx: 'auto',
-        p: 4,
-        backgroundImage: "url('https://source.unsplash.com/featured/?calendar')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundColor: 'white',
-        borderRadius: 2,
-        boxShadow: 3,
-      }}
-    >
-      <Typography
-        variant="h4"
-        align="center"
-        gutterBottom
-        sx={{
-          background: 'rgba(0, 0, 0, 0.5)',
-          color: 'white',
-          borderRadius: 2,
-          p: 1,
-        }}
-      >
-        Event Calendar
-      </Typography>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
-        <Button variant="contained" href="/add-event">
-          Create Event
-        </Button>
-      </Box>
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 flex flex-col items-center justify-center">
       <Box
         sx={{
-          background: 'rgba(255, 255, 255, 0.8)',
+          maxWidth: '1000px',
+          mx: 'auto',
+          p: 4,
+          backgroundImage: "url('https://source.unsplash.com/featured/?calendar')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundColor: 'white',
           borderRadius: 2,
-          overflow: 'hidden',
-          p: 2,
+          boxShadow: 3,
         }}
       >
-        <Calendar
-          localizer={localizer}
-          events={events}
-          startAccessor="start"
-          endAccessor="end"
-          style={{ height: 500 }}
-          popup
-          onSelectEvent={(event) => {
-            alert(`Event: ${event.title}\nVenue: ${event.venue}\nType: ${event.eventType}`);
+        <Typography
+          variant="h4"
+          align="center"
+          gutterBottom
+          sx={{
+            background: 'rgba(0, 0, 0, 0.5)',
+            color: 'white',
+            borderRadius: 2,
+            p: 1,
           }}
-          eventPropGetter={(event) => {
-            const backgroundColor =
-              event.status === 'Scheduled'
-                ? '#3f51b5'
-                : event.status === 'On Going'
-                ? '#4caf50'
-                : event.status === 'Postpone'
-                ? '#ff9800'
-                : '#f44336'; // Default color for Cancelled
-            return { style: { backgroundColor, color: 'white' } };
+        >
+          Event Calendar
+        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+          <Button variant="contained" href="/add-event">
+            Create Event
+          </Button>
+        </Box>
+        <Box
+          sx={{
+            background: 'rgba(255, 255, 255, 0.8)',
+            borderRadius: 2,
+            overflow: 'hidden',
+            p: 2,
           }}
-          tooltipAccessor={(event) => `${event.title} - ${event.venue}`}
-        />
+        >
+          <Calendar
+            localizer={localizer}
+            events={events}
+            startAccessor="start"
+            endAccessor="end"
+            style={{ height: 500 }}
+            popup
+            onSelectEvent={(event) => {
+              alert(`Event: ${event.title}\nVenue: ${event.venue}\nType: ${event.eventType}`);
+            }}
+            eventPropGetter={(event) => {
+              const backgroundColor =
+                event.status === 'Scheduled'
+                  ? '#3f51b5'
+                  : event.status === 'On Going'
+                  ? '#4caf50'
+                  : event.status === 'Postpone'
+                  ? '#ff9800'
+                  : '#f44336'; // Default color for Cancelled
+              return { style: { backgroundColor, color: 'white' } };
+            }}
+            tooltipAccessor={(event) => `${event.title} - ${event.venue}`}
+          />
+        </Box>
       </Box>
-    </Box>
     </div>
   );
 }
