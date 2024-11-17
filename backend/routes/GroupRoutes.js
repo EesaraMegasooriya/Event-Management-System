@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Group = require('../models/group'); // Import the Group model with correct casing
+const Group = require('../models/Group'); // Import the Group model with correct casing
 
 router.post('/', async (req, res) => {
     try {
