@@ -1,14 +1,17 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Backend for the Event Management System",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EesaraMegasooriya/Event-Management-System.git"
+  },
   "dependencies": {
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
@@ -19,5 +22,19 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.7"
-  }
+  },
+  "engines": {
+    "node": "16.x",
+    "npm": "8.x"
+  },
+  "keywords": [
+    "backend",
+    "event-management"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EesaraMegasooriya/Event-Management-System/issues"
+  },
+  "homepage": "https://github.com/EesaraMegasooriya/Event-Management-System"
 }
